@@ -1,6 +1,11 @@
+# 忽略所有文件
+*
+# 但不忽略 .gitignore 文件本身
+!.gitignore
 File/
-**/text/*
 .env
-*.log         # 忽略所有 .log 文件
+*.log
 .DS_Store
 .idea/
+**/text/
+**/target/

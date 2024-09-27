@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.adaa7.server.mapper.LoginMapper">
+    <insert id="register">
+        insert into
+            user_info(user_name, password, avatar, status, create_time, change_time)
+        VALUES (#{userName},#{password},#{avatar},#{status},now(),now());
+    </insert>
+    <select id="findUName" resultType="com.adaa7.pojo.entity.User">
+        select *
+        from user_info
+        where user_name=#{username};
+    </select>
+</mapper>

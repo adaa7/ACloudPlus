@@ -1,6 +1,7 @@
 File/
-**/text/*
 .env
-*.log         # 忽略所有 .log 文件
+*.log
 .DS_Store
 .idea/
+**/text/
+**/target/

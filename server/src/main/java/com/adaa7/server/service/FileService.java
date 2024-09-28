@@ -5,6 +5,7 @@ import com.adaa7.pojo.dto.FileAddDTO;
 import com.adaa7.pojo.dto.FileChangeDTO;
 import com.adaa7.pojo.dto.FileDeleteDTO;
 import com.adaa7.pojo.dto.FilePageQueryDTO;
+import com.adaa7.pojo.entity.File;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface FileService {
@@ -18,4 +19,6 @@ public interface FileService {
     String fileDelete(FileDeleteDTO fileDeleteDTO);
 
     String fileChange(FileChangeDTO fileChangeDTO);
+
+    File fileDownload(int fileId);
 }

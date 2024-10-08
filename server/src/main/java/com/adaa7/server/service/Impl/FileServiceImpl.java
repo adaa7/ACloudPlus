@@ -181,10 +181,15 @@ public class FileServiceImpl implements FileService {
             throw new FileNotFindException("文件未找到");
         }
         if(file.getFolderType()==1){
-            String filePid = file.getFilePid().equals("/")? "/"+file.getFileName() : file.getFilePid()+"/"+file.getFileName();
-            if(fileMapper.deleteDir(BaseContext.getCurrentId(),filePid)){
-                fileMapper.deleteFile(BaseContext.getCurrentId(),file.getFileId());
+            String filePid="";
+            if (file.getFilePid().equals("/")) {
+                filePid= "/"+file.getFileId();
+            }else {
+                filePid= file.getFilePid()+"/"+file.getFileId();
             }
+            fileMapper.deleteDir(BaseContext.getCurrentId(),filePid);
+            fileMapper.deleteFile(BaseContext.getCurrentId(),file.getFileId());
+
         }else {
             fileMapper.deleteFile(BaseContext.getCurrentId(),file.getFileId());
         }

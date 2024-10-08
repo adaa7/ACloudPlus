@@ -206,4 +206,16 @@ public class FileServiceImpl implements FileService {
         }
         return "文件重命名成功";
     }
+
+    @Override
+    public File fileDownload(int fileId) {
+        File file = fileMapper.findFileById(BaseContext.getCurrentId(),fileId);
+        if(file==null){
+            throw new FileNotFindException("文件未找到");
+        }
+        if(file.getFolderType()==1){
+            throw new FileNotFindException("需要一个文件");
+        }
+        return file;
+    }
 }

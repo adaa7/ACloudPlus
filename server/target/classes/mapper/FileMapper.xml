@@ -5,9 +5,9 @@
 <mapper namespace="com.adaa7.server.mapper.FileMapper">
     <insert id="uploadFile">
         insert into
-            file_info(user_id,file_pid,file_name,file_cover,file_path,file_md5,folder_type,file_category,create_time,last_update_time)
+            file_info(user_id,file_pid,file_name,file_cover,file_path,file_md5,folder_type,file_category,file_size,create_time,last_update_time)
             values
-            (#{userId},#{filePid},#{fileName},#{fileCover},#{filePath},#{fileMd5},#{folderType},#{fileCategory},now(),now())
+            (#{userId},#{filePid},#{fileName},#{fileCover},#{filePath},#{fileMd5},#{folderType},#{fileCategory},#{fileSize},now(),now())
     </insert>
     <update id="fileChange">
         UPDATE file_info
@@ -106,5 +106,9 @@
         WHERE user_id = #{userId} AND file_category = 2
         ORDER BY folder_type DESC, last_update_time DESC
             LIMIT #{page}, #{pageSize}
+    </select>
+    <select id="findFiles" resultType="com.adaa7.pojo.entity.File">
+        SELECT * FROM file_info
+        WHERE user_id = #{userId} AND file_pid LIKE CONCAT(#{filePid}, '%') AND folder_type = 0
     </select>
 </mapper>

@@ -5,12 +5,32 @@
 <mapper namespace="com.adaa7.server.mapper.LoginMapper">
     <insert id="register">
         insert into
-            user_info(user_name, password, avatar, status, create_time, change_time)
-        VALUES (#{userName},#{password},#{avatar},#{status},now(),now());
+            user_info(user_name, password, avatar, status,use_size, create_time, change_time)
+        VALUES (#{userName},#{password},#{avatar},#{status},#{useSize},now(),now());
     </insert>
+    <update id="uploadFileSize">
+        UPDATE user_info
+        SET use_size = use_size + #{fileSize}
+        WHERE user_id = #{userId};
+    </update>
+    <delete id="deleteFileSize">
+        UPDATE user_info
+        SET use_size = use_size - #{fileSize}
+        WHERE user_id = #{userId};
+    </delete>
     <select id="findUName" resultType="com.adaa7.pojo.entity.User">
         select *
         from user_info
         where user_name=#{username};
+    </select>
+    <select id="findUID" resultType="com.adaa7.pojo.entity.User">
+        select *
+        from user_info
+        where user_id=#{userId};
+    </select>
+    <select id="findRoleSize" resultType="java.lang.Long">
+        select size
+        from user_permissions
+        where permissions_role=#{permissionsRole};
     </select>
 </mapper>

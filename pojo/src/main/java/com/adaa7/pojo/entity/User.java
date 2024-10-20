@@ -13,9 +13,11 @@ import java.sql.Date;
 public class User {
     private Integer userId;
     private String userName;
+    private Integer permissionsRole;
     private String password;
     private String avatar;
     private int status;
+    private long useSize;
     private Date createTime;
     private Date changeTime;
 }

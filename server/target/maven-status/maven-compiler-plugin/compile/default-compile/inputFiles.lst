@@ -1,4 +1,5 @@
 /Users/luckycat/Code/project/ACloudPlus/server/src/main/java/com/adaa7/server/ServerApplication.java
+/Users/luckycat/Code/project/ACloudPlus/server/src/main/java/com/adaa7/server/config/BannerApplicationRunner.java
 /Users/luckycat/Code/project/ACloudPlus/server/src/main/java/com/adaa7/server/config/WebMvcConfiguration.java
 /Users/luckycat/Code/project/ACloudPlus/server/src/main/java/com/adaa7/server/controller/FileController.java
 /Users/luckycat/Code/project/ACloudPlus/server/src/main/java/com/adaa7/server/controller/LoginController.java

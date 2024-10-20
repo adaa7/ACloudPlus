@@ -1,7 +1,6 @@
 package com.adaa7.server.mapper;
 
 import com.adaa7.pojo.entity.File;
-import com.adaa7.pojo.entity.FilePage;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -40,6 +39,13 @@ public interface FileMapper {
 
     List<File> page(@Param("userId") int userId, @Param("filePid") String filePid,
                     @Param("page") int page, @Param("pageSize") int pageSize);
+    List<File> pageImage(@Param("userId") int userId,
+                         @Param("page") int page, @Param("pageSize") int pageSize);
+    List<File> pageVideo(@Param("userId") int userId,
+                         @Param("page") int page, @Param("pageSize") int pageSize);
+    List<File> pageAudio(@Param("userId") int userId,
+                         @Param("page") int page, @Param("pageSize") int pageSize);
 
     long pageTotal(@Param("userId") int userId, @Param("filePid") String filePid);
+
 }

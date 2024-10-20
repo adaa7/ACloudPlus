@@ -11,6 +11,10 @@ import org.springframework.web.multipart.MultipartFile;
 public interface FileService {
 
     PageResult page(FilePageQueryDTO filePageQueryDTO);
+    PageResult pageImage(FilePageQueryDTO filePageQueryDTO);
+    PageResult pageVideo(FilePageQueryDTO filePageQueryDTO);
+
+    PageResult pageAudio(FilePageQueryDTO filePageQueryDTO);
 
     String addFile(MultipartFile file, String filePid);
 
@@ -21,4 +25,6 @@ public interface FileService {
     String fileChange(FileChangeDTO fileChangeDTO);
 
     File fileDownload(int fileId);
+
+
 }

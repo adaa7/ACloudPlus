@@ -5,3 +5,4 @@ File/
 .idea/
 **/text/
 **/target/
+Configuration.json

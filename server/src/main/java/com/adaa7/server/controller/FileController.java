@@ -29,6 +29,18 @@ public class FileController {
     public Result<PageResult> page(FilePageQueryDTO filePageQueryDTO){
         return Result.success(fileService.page(filePageQueryDTO));
     }
+    @GetMapping("/pageImage")
+    public Result<PageResult> pageImage(FilePageQueryDTO filePageQueryDTO){
+        return Result.success(fileService.pageImage(filePageQueryDTO));
+    }
+    @GetMapping("/pageVideo")
+    public Result<PageResult> pageVideo(FilePageQueryDTO filePageQueryDTO){
+        return Result.success(fileService.pageVideo(filePageQueryDTO));
+    }
+    @GetMapping("/pageAudio")
+    public Result<PageResult> pageAudio(FilePageQueryDTO filePageQueryDTO){
+        return Result.success(fileService.pageAudio(filePageQueryDTO));
+    }
     @PostMapping("/addfile")
     public Result addFile(@RequestParam("file") MultipartFile file, @RequestParam("filePid") String filePid){
         return Result.success(fileService.addFile(file,filePid));

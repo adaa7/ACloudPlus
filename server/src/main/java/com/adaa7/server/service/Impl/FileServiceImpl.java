@@ -62,6 +62,7 @@ public class FileServiceImpl implements FileService {
     }
     @Override
     public PageResult page(FilePageQueryDTO filePageQueryDTO) {
+
         // 确保页码和每页大小有效
         if (filePageQueryDTO.getPage() <= 0 || filePageQueryDTO.getPageSize() <= 0) {
             throw new IllegalArgumentException("Page number and page size must be greater than zero.");
@@ -69,6 +70,50 @@ public class FileServiceImpl implements FileService {
         long Total = fileMapper.pageTotal(BaseContext.getCurrentId(),filePageQueryDTO.getFilePid());
         int page = (filePageQueryDTO.getPage()-1)*filePageQueryDTO.getPageSize();
         List<File> Page = fileMapper.page(BaseContext.getCurrentId(),filePageQueryDTO.getFilePid(),page,filePageQueryDTO.getPageSize());
+        PageResult pageResult = new PageResult();
+        pageResult.setTotal(Total);
+        pageResult.setRecords(Page);
+        return pageResult;
+    }
+    @Override
+    public PageResult pageImage(FilePageQueryDTO filePageQueryDTO) {
+        // 确保页码和每页大小有效
+        if (filePageQueryDTO.getPage() <= 0 || filePageQueryDTO.getPageSize() <= 0) {
+            throw new IllegalArgumentException("Page number and page size must be greater than zero.");
+        }
+        long Total = fileMapper.pageTotal(BaseContext.getCurrentId(),filePageQueryDTO.getFilePid());
+        int page = (filePageQueryDTO.getPage()-1)*filePageQueryDTO.getPageSize();
+        List<File> Page = fileMapper.pageImage(BaseContext.getCurrentId(),page,filePageQueryDTO.getPageSize());
+        PageResult pageResult = new PageResult();
+        pageResult.setTotal(Total);
+        pageResult.setRecords(Page);
+        return pageResult;
+    }
+
+    @Override
+    public PageResult pageVideo(FilePageQueryDTO filePageQueryDTO) {
+        // 确保页码和每页大小有效
+        if (filePageQueryDTO.getPage() <= 0 || filePageQueryDTO.getPageSize() <= 0) {
+            throw new IllegalArgumentException("Page number and page size must be greater than zero.");
+        }
+        long Total = fileMapper.pageTotal(BaseContext.getCurrentId(),filePageQueryDTO.getFilePid());
+        int page = (filePageQueryDTO.getPage()-1)*filePageQueryDTO.getPageSize();
+        List<File> Page = fileMapper.pageVideo(BaseContext.getCurrentId(),page,filePageQueryDTO.getPageSize());
+        PageResult pageResult = new PageResult();
+        pageResult.setTotal(Total);
+        pageResult.setRecords(Page);
+        return pageResult;
+    }
+
+    @Override
+    public PageResult pageAudio(FilePageQueryDTO filePageQueryDTO) {
+        // 确保页码和每页大小有效
+        if (filePageQueryDTO.getPage() <= 0 || filePageQueryDTO.getPageSize() <= 0) {
+            throw new IllegalArgumentException("Page number and page size must be greater than zero.");
+        }
+        long Total = fileMapper.pageTotal(BaseContext.getCurrentId(),filePageQueryDTO.getFilePid());
+        int page = (filePageQueryDTO.getPage()-1)*filePageQueryDTO.getPageSize();
+        List<File> Page = fileMapper.pageAudio(BaseContext.getCurrentId(),page,filePageQueryDTO.getPageSize());
         PageResult pageResult = new PageResult();
         pageResult.setTotal(Total);
         pageResult.setRecords(Page);
@@ -102,33 +147,41 @@ public class FileServiceImpl implements FileService {
                 fileData.setFilePath(Md5.getFilePath());
             }else {
                 try {
-                    fileData.setFilePath(FileUtil.uploadsFile(file));
+                switch (fileSuffix) {
+                    case "mp4" -> {
+                        fileData.setFilePath(FileUtil.uploadsFile(file));
+                        fileData.setFileCover("/admin/uploads/mp5default.png");
+                        fileData.setFileCategory(1);
+                    }
+                    case "mp3" -> {
+                        fileData.setFilePath(FileUtil.uploadsFile(file));
+                        fileData.setFileCover("/admin/uploads/musicdefault.png");
+                        fileData.setFileCategory(2);
+                    }
+                    case "png", "jpeg", "jpg" -> {
+                        String path = FileUtil.uploadsFileImager(file);
+                        int lastSlashIndex = path.lastIndexOf("/");
+                        String filename = path.substring(lastSlashIndex + 1);
+                        fileData.setFileCover("/admin/uploads/"+filename);
+                        fileData.setFilePath(path);
+                        fileData.setFileCategory(3);
+                    }
+                    case "txt", "doc" -> {
+                        fileData.setFilePath(FileUtil.uploadsFile(file));
+                        fileData.setFileCover("/admin/uploads/textdefault.png");
+                        fileData.setFileCategory(4);
+                    }
+                    default -> {
+                        fileData.setFilePath(FileUtil.uploadsFile(file));
+                        fileData.setFileCover("/admin/uploads/other-default.png");
+                        fileData.setFileCategory(5);
+                    }
+                }
                 } catch (IOException e) {
                     throw new FilePidNullException("文件上传失败");
                 }
             }
-            switch (fileSuffix) {
-                case "mp4" -> {
-                    fileData.setFileCover("/admin/uploads/mp5default.png");
-                    fileData.setFileCategory(1);
-                }
-                case "mp3" -> {
-                    fileData.setFileCover("/admin/uploads/musicdefault.png");
-                    fileData.setFileCategory(2);
-                }
-                case "png", "jpeg", "jpg" -> {
-                    fileData.setFileCover("/admin/uploads/img-default.png");
-                    fileData.setFileCategory(3);
-                }
-                case "txt", "doc" -> {
-                    fileData.setFileCover("/admin/uploads/textdefault.png");
-                    fileData.setFileCategory(4);
-                }
-                default -> {
-                    fileData.setFileCover("/admin/uploads/other-default.png");
-                    fileData.setFileCategory(5);
-                }
-            }
+            fileData.setFileSize(file.getSize());
             fileData.setFolderType(0);
             try {
                 fileMapper.uploadFile(fileData);
@@ -165,6 +218,7 @@ public class FileServiceImpl implements FileService {
                 .folderType(1)
                 .fileCategory(5)
                 .filePath("Dir")
+                .fileSize(0)
                 .build();
         try {
             fileMapper.uploadFile(dirFile);

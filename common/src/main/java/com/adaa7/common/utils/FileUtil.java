@@ -15,10 +15,20 @@ public class FileUtil {
         file.transferTo(descFile);
         return JsonConfigUtil.UPLOADS_PATH+fileName;
     }
+    public static String uploadsFileImager(MultipartFile file) throws IOException {
+        String fileSuffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf('.')+1);
+        String fileName = UUID.randomUUID().toString().replace("-","")+"."+fileSuffix;
+        fileDir(JsonConfigUtil.UPLOADS_PATH+"Images/");
+        File descFile = new File(JsonConfigUtil.UPLOADS_PATH+"Images/",fileName);
+        file.transferTo(descFile);
+        return JsonConfigUtil.UPLOADS_PATH+"Images/"+fileName;
+    }
     private static void fileDir(String url) {
         File file = new File(url);
         if (!file.exists()) {
             file.mkdirs();
         }
     }
+
+
 }

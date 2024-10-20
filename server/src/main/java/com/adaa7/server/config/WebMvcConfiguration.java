@@ -1,10 +1,13 @@
 package com.adaa7.server.config;
 
+import com.adaa7.common.utils.JsonConfigUtil;
 import com.adaa7.server.interceptor.JwtTokenAdminInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.*;
+
+import java.io.File;
 
 @Configuration
 public class WebMvcConfiguration extends WebMvcConfigurationSupport {
@@ -16,6 +19,12 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         registry.addInterceptor(jwtTokenAdminInterceptor)
                 .addPathPatterns("/admin/**","/file/**")
                 .excludePathPatterns("/admin/login","/admin/register");
+        System.out.println(JsonConfigUtil.UPLOADS_PATH);
+    }
+    @Override
+    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/admin/uploads/**")
+                .addResourceLocations("file://"+JsonConfigUtil.UPLOADS_PATH+"/Images/");
     }
     @Override
     public void addCorsMappings(CorsRegistry registry) {

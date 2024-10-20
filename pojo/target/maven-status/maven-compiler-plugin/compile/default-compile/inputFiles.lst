@@ -1,4 +1,5 @@
 /Users/luckycat/Code/project/ACloudPlus/pojo/src/main/java/com/adaa7/pojo/dto/FileAddDTO.java
+/Users/luckycat/Code/project/ACloudPlus/pojo/src/main/java/com/adaa7/pojo/dto/FileChangeDTO.java
 /Users/luckycat/Code/project/ACloudPlus/pojo/src/main/java/com/adaa7/pojo/dto/FileCreateDirDTO.java
 /Users/luckycat/Code/project/ACloudPlus/pojo/src/main/java/com/adaa7/pojo/dto/FileDeleteDTO.java
 /Users/luckycat/Code/project/ACloudPlus/pojo/src/main/java/com/adaa7/pojo/dto/FilePageQueryDTO.java

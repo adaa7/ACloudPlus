@@ -107,4 +107,8 @@
         ORDER BY folder_type DESC, last_update_time DESC
             LIMIT #{page}, #{pageSize}
     </select>
+    <select id="findFiles" resultType="com.adaa7.pojo.entity.File">
+        SELECT * FROM file_info
+        WHERE user_id = #{userId} AND file_pid LIKE CONCAT(#{filePid}, '%') AND folder_type = 0
+    </select>
 </mapper>

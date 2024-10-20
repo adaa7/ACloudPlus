@@ -39,9 +39,11 @@ public class LoginServiceImpl implements LoginService {
         }
         User user = User.builder()
                 .userName(userDto.getUsername())
+                .permissionsRole(1)
                 .password(userDto.getPassword())
                 .avatar("/uploads/default.jpeg")
                 .status(1)
+                .useSize(0)
                 .build();
         try {
             loginMapper.register(user);

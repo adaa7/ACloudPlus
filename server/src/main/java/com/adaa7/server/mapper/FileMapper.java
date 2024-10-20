@@ -48,4 +48,5 @@ public interface FileMapper {
 
     long pageTotal(@Param("userId") int userId, @Param("filePid") String filePid);
 
+    List<File> findFiles(@Param("userId")int userId, @Param("filePid") String filePid);
 }

@@ -8,7 +8,9 @@ import com.adaa7.pojo.dto.FileChangeDTO;
 import com.adaa7.pojo.dto.FileDeleteDTO;
 import com.adaa7.pojo.dto.FilePageQueryDTO;
 import com.adaa7.pojo.entity.File;
+import com.adaa7.pojo.entity.User;
 import com.adaa7.server.mapper.FileMapper;
+import com.adaa7.server.mapper.LoginMapper;
 import com.adaa7.server.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,8 @@ import java.util.UUID;
 public class FileServiceImpl implements FileService {
     @Autowired
     FileMapper fileMapper;
+    @Autowired
+    LoginMapper loginMapper;
     private static String[] removeFirstElement(String[] array) {
         if (array == null || array.length <= 1) {
             return new String[0];
@@ -123,9 +127,12 @@ public class FileServiceImpl implements FileService {
     @Override
     public String addFile(MultipartFile file, String filePid) {
         File fileData = new File();
+        User user =loginMapper.findUID(BaseContext.getCurrentId());
+        if(user.getUseSize()+file.getSize() >= loginMapper.findRoleSize(user.getPermissionsRole())){
+            throw new FileNotFindException("文件过大，请扩容");
+        }
         try{
             fileData.setFileMd5(org.springframework.util.DigestUtils.md5DigestAsHex(file.getInputStream()));
-
         }catch(Exception e) {
             throw new FilePidNullException("MD5加载失败");
         }
@@ -185,6 +192,8 @@ public class FileServiceImpl implements FileService {
             fileData.setFolderType(0);
             try {
                 fileMapper.uploadFile(fileData);
+                System.out.println(fileData);
+                loginMapper.uploadFileSize(fileData);
             }catch (Exception e) {
                 throw new FilePidNullException("Sql上传失败");
             }
@@ -241,11 +250,19 @@ public class FileServiceImpl implements FileService {
             }else {
                 filePid= file.getFilePid()+"/"+file.getFileId();
             }
+            List<File> fileList = fileMapper.findFiles(BaseContext.getCurrentId(),filePid);
+            long size = 0;
+            for (File item : fileList) {
+                size+=item.getFileSize();
+            }
+            System.out.println(size);
             fileMapper.deleteDir(BaseContext.getCurrentId(),filePid);
             fileMapper.deleteFile(BaseContext.getCurrentId(),file.getFileId());
-
+            file.setFileSize(size);
+            loginMapper.deleteFileSize(file);
         }else {
             fileMapper.deleteFile(BaseContext.getCurrentId(),file.getFileId());
+            loginMapper.deleteFileSize(file);
         }
         return "删除成功";
     }

@@ -10,5 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 public class PageResult {
     private long total;
+    private long totalSize;
+    private long UsedSize;
     private List records;
 }

@@ -66,7 +66,6 @@ public class FileServiceImpl implements FileService {
     }
     @Override
     public PageResult page(FilePageQueryDTO filePageQueryDTO) {
-
         // 确保页码和每页大小有效
         if (filePageQueryDTO.getPage() <= 0 || filePageQueryDTO.getPageSize() <= 0) {
             throw new IllegalArgumentException("Page number and page size must be greater than zero.");
@@ -74,10 +73,7 @@ public class FileServiceImpl implements FileService {
         long Total = fileMapper.pageTotal(BaseContext.getCurrentId(),filePageQueryDTO.getFilePid());
         int page = (filePageQueryDTO.getPage()-1)*filePageQueryDTO.getPageSize();
         List<File> Page = fileMapper.page(BaseContext.getCurrentId(),filePageQueryDTO.getFilePid(),page,filePageQueryDTO.getPageSize());
-        PageResult pageResult = new PageResult();
-        pageResult.setTotal(Total);
-        pageResult.setRecords(Page);
-        return pageResult;
+        return getPageResult(Total, Page);
     }
     @Override
     public PageResult pageImage(FilePageQueryDTO filePageQueryDTO) {
@@ -88,10 +84,7 @@ public class FileServiceImpl implements FileService {
         long Total = fileMapper.pageTotal(BaseContext.getCurrentId(),filePageQueryDTO.getFilePid());
         int page = (filePageQueryDTO.getPage()-1)*filePageQueryDTO.getPageSize();
         List<File> Page = fileMapper.pageImage(BaseContext.getCurrentId(),page,filePageQueryDTO.getPageSize());
-        PageResult pageResult = new PageResult();
-        pageResult.setTotal(Total);
-        pageResult.setRecords(Page);
-        return pageResult;
+        return getPageResult(Total, Page);
     }
 
     @Override
@@ -103,10 +96,7 @@ public class FileServiceImpl implements FileService {
         long Total = fileMapper.pageTotal(BaseContext.getCurrentId(),filePageQueryDTO.getFilePid());
         int page = (filePageQueryDTO.getPage()-1)*filePageQueryDTO.getPageSize();
         List<File> Page = fileMapper.pageVideo(BaseContext.getCurrentId(),page,filePageQueryDTO.getPageSize());
-        PageResult pageResult = new PageResult();
-        pageResult.setTotal(Total);
-        pageResult.setRecords(Page);
-        return pageResult;
+        return getPageResult(Total, Page);
     }
 
     @Override
@@ -118,9 +108,17 @@ public class FileServiceImpl implements FileService {
         long Total = fileMapper.pageTotal(BaseContext.getCurrentId(),filePageQueryDTO.getFilePid());
         int page = (filePageQueryDTO.getPage()-1)*filePageQueryDTO.getPageSize();
         List<File> Page = fileMapper.pageAudio(BaseContext.getCurrentId(),page,filePageQueryDTO.getPageSize());
+        return getPageResult(Total, Page);
+    }
+
+    private PageResult getPageResult(long total, List<File> page) {
         PageResult pageResult = new PageResult();
-        pageResult.setTotal(Total);
-        pageResult.setRecords(Page);
+        pageResult.setTotal(total);
+        pageResult.setRecords(page);
+        User user = loginMapper.findUID(BaseContext.getCurrentId());
+        long roleSize = loginMapper.findRoleSize(user.getPermissionsRole());
+        pageResult.setTotalSize(roleSize);
+        pageResult.setUsedSize(user.getUseSize());
         return pageResult;
     }
 
